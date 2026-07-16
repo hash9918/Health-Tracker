@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-clinic-bg text-clinic-ink font-body antialiased;
+  }
+  /* Visible keyboard focus for accessibility across the app */
+  :focus-visible {
+    outline: 2px solid theme("colors.pulse.500");
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* Signature signal element: a subtle animated EKG pulse-line used as a header accent */
+.ekg-line {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: draw-ekg 2.6s ease-in-out infinite;
+}
+
+@keyframes draw-ekg {
+  0% {
+    stroke-dashoffset: 300;
+  }
+  60% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -300;
+  }
+}

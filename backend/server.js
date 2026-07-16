@@ -1,0 +1,37 @@
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
+const recordRoutes = require("./routes/recordRoutes");
+
+// Connect to MongoDB
+connectDB();
+
+const app = express();
+
+// --- Middleware ---
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "*",
+  })
+);
+app.use(express.json()); // parse JSON request bodies
+
+// --- Routes ---
+app.use("/api/records", recordRoutes);
+
+// Simple health-check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "BP Tracker API is running" });
+});
+
+// --- Global error handler (catches anything that slips past controllers) ---
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: "Something went wrong on the server." });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
