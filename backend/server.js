@@ -10,9 +10,15 @@ connectDB();
 const app = express();
 
 // --- Middleware ---
+const allowedOrigins = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(",").map(origin => origin.trim().replace(/\/$/, ""))
+  : "*";
+
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "*",
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json()); // parse JSON request bodies
