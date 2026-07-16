@@ -123,3 +123,4 @@ Thumbs.db
 .env.production.local
 .env.local
 *.env
+.env.example
